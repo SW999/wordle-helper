@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wordle helper</title>
+  <link rel="canonical" href="https://sw999.github.io/wordle-helper/" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/wordle-helper/manifest.webmanifest">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<h1>Wordle helper <sup class="tooltip" data-tooltip="Only Russian dictionary supported for now">*</sup></h1>
+<form id="form">
+  <div class="wrapper">
+    <input type="text" name="c1" onkeyup="validate(this);" placeholder="-" />
+    <input type="text" name="c2" onkeyup="validate(this);" placeholder="-" />
+    <input type="text" name="c3" onkeyup="validate(this);" placeholder="-" />
+    <input type="text" name="c4" onkeyup="validate(this);" placeholder="-" />
+    <input type="text" name="c5" onkeyup="validate(this);" placeholder="-" />
+  </div>
+  <div class="wrapper">
+  <button type="button" id="find">Find</button>
+  <button type="button" id="resetBtn" class="reset">Reset</button>
+  </div>
+</form>
+<div class="result"></div>
+
+<script>
+  if (navigator.serviceWorker) {
+    navigator.serviceWorker.register (
+      '/wordle-helper/sw.js',
+      {scope: '/wordle-helper/'}
+    )
+  }
+</script>
+<script src="js/app.js"></script>
+<script src="js/dictionary_ru.js" defer></script>
+</body>
+</html>
