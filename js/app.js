@@ -7,6 +7,22 @@ function validate(input) {
   input.value = input.value.replace(/\d/g, '').substr(0, 1).toUpperCase();
 }
 
+function testCharCode(char) {
+  if (!char) return '';
+  if (char.charCodeAt(0) > 64 && char.charCodeAt(0) < 123) return 'en';
+  if (char.charCodeAt(0) > 1024 && char.charCodeAt(0) < 1106) return 'ru';
+  return 'noname';
+}
+
+function checkLang(options) {
+  const langArr = Object.entries(options).reduce((total, [key, value]) => {
+    const lang = testCharCode(value);
+    return lang !== '' && total.indexOf(lang) < 0 ? [...total, lang] : [...total];
+  }, []);
+
+  return langArr.length > 1 ? 'noname' : langArr[0];
+}
+
 function resetForm() {
   document.getElementById('form').reset();
   result.classList.remove('on');
@@ -21,7 +37,6 @@ function showHint(value) {
   if (!reset.classList.contains('on')) {
     reset.classList.add('on');
   }
-
 }
 
 form.addEventListener('send', e => e.preventDefault());
@@ -34,8 +49,12 @@ find.addEventListener('click', e => {
   let letters = 0;
   const options = {};
   const formData = new FormData(form);
+  const dict = {
+    words_ru: words_ru || [],
+    words_en: words_en || [],
+  }
 
-  for (var p of formData) {
+  for (let p of formData) {
     options[p[0]] = p[1];
     if(p[1] !== '') {
       letters++;
@@ -48,13 +67,21 @@ find.addEventListener('click', e => {
     return;
   }
 
-  hint = words?.reduce((total, currentValue) => {
+  const lang = checkLang(options);
+  if (lang === 'noname') {
+    showHint('Your language not supported, sorry!');
+    return;
+  }
+
+  hint = dict[`words_${lang}`].reduce((total, currentValue) => {
     if(currentValue.length === wordLength) {
       const res = Object.entries(options).every(([key, value], i) => currentValue[i] === value.toLowerCase() || value === '');
       return res ? [...total, currentValue] : [...total];
     }
     return [...total];
   }, []);
+
+  result.setAttribute('lang', lang);
 
   showHint(hint.length > 0 ? hint.join(' ') : 'No result');
 });

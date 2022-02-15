@@ -115,15 +115,18 @@ button {
 }
 
 .result {
-  width: 90%;
-  max-width: 72rem;
+  width: 94%;
+  max-width: 100rem;
   max-height: 0;
   margin: 3rem auto;
   padding: 0;
   border: 0;
   border-radius: 1rem;
   color: transparent;
-  font-size: 3rem;
+  font-size: 1.8rem;
+  text-align: left;
+  word-break: break-word;
+  hyphens: auto;
   background-color: #111;
   transition: max-height .3s, border-width .3s, padding .3s, color .1s 0s;
 
@@ -228,5 +231,9 @@ button {
     margin: 5rem 0 0;
     padding: 1.5rem;
     font-size: 4rem;
+  }
+
+  .result {
+    font-size: 3rem;
   }
 }
