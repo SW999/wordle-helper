@@ -7,16 +7,16 @@ function validate(input) {
   input.value = input.value.replace(/\d/g, '').substr(0, 1).toUpperCase();
 }
 
-function testCharCode(char) {
+function checkCharCode(char) {
   if (!char) return '';
   if (char.charCodeAt(0) > 64 && char.charCodeAt(0) < 123) return 'en';
   if (char.charCodeAt(0) > 1024 && char.charCodeAt(0) < 1106) return 'ru';
   return 'noname';
 }
 
-function checkLang(options) {
-  const langArr = Object.entries(options).reduce((total, [key, value]) => {
-    const lang = testCharCode(value);
+function getLanguage(options) {
+  const langArr = Object.values(options).reduce((total, value) => {
+    const lang = checkCharCode(value);
     return lang !== '' && total.indexOf(lang) < 0 ? [...total, lang] : [...total];
   }, []);
 
@@ -24,7 +24,7 @@ function checkLang(options) {
 }
 
 function resetForm() {
-  document.getElementById('form').reset();
+  form.reset();
   result.classList.remove('on');
   reset.classList.remove('on');
 }
@@ -67,16 +67,16 @@ find.addEventListener('click', e => {
     return;
   }
 
-  const lang = checkLang(options);
+  const lang = getLanguage(options);
   if (lang === 'noname') {
     showHint('Your language not supported, sorry!');
     return;
   }
 
-  hint = dict[`words_${lang}`].reduce((total, currentValue) => {
-    if(currentValue.length === wordLength) {
-      const res = Object.entries(options).every(([key, value], i) => currentValue[i] === value.toLowerCase() || value === '');
-      return res ? [...total, currentValue] : [...total];
+  hint = dict[`words_${lang}`].reduce((total, currentWord) => {
+    if(currentWord.length === wordLength) {
+      const res = Object.values(options).every((value, i) => currentWord[i] === value.toLowerCase() || value === '');
+      return res ? [...total, currentWord] : [...total];
     }
     return [...total];
   }, []);

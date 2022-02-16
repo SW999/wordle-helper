@@ -1,6 +1,6 @@
 var GHPATH = '/wordle-helper';
 var APP_PREFIX = 'wh_';
-var VERSION = 'version_003';
+var VERSION = 'version_004';
 var URLS = [
   `${GHPATH}/`,
   `${GHPATH}/index.html`,
