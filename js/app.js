@@ -1,10 +1,52 @@
-const form = document.getElementById('form');
+'use strict'
+
+const form = document.getElementById('formAvailableCharacters');
 const find = document.getElementById('find');
+const grid = document.getElementById('grid');
 const result = document.querySelector('.result');
 const reset = document.getElementById('resetBtn');
 
+const langOptions = {
+  en: {length: 26, startCharCode: 65},
+  ru: {length: 32, startCharCode: 1040},
+};
+let blockedLetters = [];
+
+createCharsGrid('en');
+
+function createCharsGrid (lang) {
+  const letters = getAlphabet(lang);
+  const fragment = new DocumentFragment()
+  grid.textContent = '';
+
+  letters.forEach(function (char) {
+    const div = document.createElement('div')
+    div.textContent = char;
+    div.classList.add('cell');
+    div.id = char;
+    fragment.appendChild(div);
+  })
+
+  grid.appendChild(fragment);
+}
+
+function getAlphabet(lang) {
+  const alphabetCharCodes = Array.from(Array(langOptions[lang].length)).map((e, i) => i + langOptions[lang].startCharCode);
+  return alphabetCharCodes.map(x => String.fromCharCode(x));
+}
+
 function validate(input) {
-  input.value = input.value.replace(/\d/g, '').substr(0, 1).toUpperCase();
+  if (input.value === '') {
+    document.getElementById(input.dataset.char)?.classList.remove('selected'); // TODO: what if there are 2 repeated characters?
+  }
+
+  input.value = input.value.replace(/[^A-Za-zA-Яа-я]/g, '').toUpperCase();
+  document.getElementById(input.value)?.classList.add('selected');
+  input.dataset.char = input.value;
+
+  if(input.nextElementSibling && input.nextElementSibling.tagName === 'INPUT') {
+    input.nextElementSibling.focus();
+  }
 }
 
 function checkCharCode(char) {
@@ -27,6 +69,7 @@ function resetForm() {
   form.reset();
   result.classList.remove('on');
   reset.classList.remove('on');
+  document.getElementById('langEn').click();
 }
 
 function showHint(value) {
@@ -37,6 +80,10 @@ function showHint(value) {
   if (!reset.classList.contains('on')) {
     reset.classList.add('on');
   }
+}
+
+function handleChangeLang(radio) {
+  createCharsGrid(radio.value);
 }
 
 form.addEventListener('send', e => e.preventDefault());
@@ -50,8 +97,8 @@ find.addEventListener('click', e => {
   const options = {};
   const formData = new FormData(form);
   const dict = {
-    words_ru: words_ru || [],
-    words_en: words_en || [],
+    words_ru: words_ru ?? [],
+    words_en: words_en ?? [],
   }
 
   for (let p of formData) {
@@ -74,8 +121,8 @@ find.addEventListener('click', e => {
   }
 
   hint = dict[`words_${lang}`].reduce((total, currentWord) => {
-    if(currentWord.length === wordLength) {
-      const res = Object.values(options).every((value, i) => currentWord[i] === value.toLowerCase() || value === '');
+    if(currentWord.length === wordLength && !blockedLetters.some(v => currentWord.includes(v))) {
+      const res = Object.values(options).every((value, i) => (currentWord[i] === value.toLowerCase() || value === ''));
       return res ? [...total, currentWord] : [...total];
     }
     return [...total];
@@ -84,4 +131,16 @@ find.addEventListener('click', e => {
   result.setAttribute('lang', lang);
 
   showHint(hint.length > 0 ? hint.join(' ') : 'No result');
+});
+
+grid.addEventListener('click', e => {
+  const target = e.target;
+  if (target.classList.contains('cell') && !target.classList.contains('selected')) {
+    target.classList.toggle('not');
+    if (target.classList.contains('not')) {
+      blockedLetters = [...blockedLetters, target.id.toLowerCase()];
+    } else {
+      blockedLetters = blockedLetters.filter(item => item !== target.id);
+    }
+  }
 });
