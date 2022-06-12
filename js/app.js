@@ -7,9 +7,18 @@ const result = document.querySelector('.result');
 const reset = document.getElementById('resetBtn');
 
 const langOptions = {
-  en: {length: 26, startCharCode: 65},
-  ru: {length: 32, startCharCode: 1040},
+  en: {
+    length: 26,
+    startCharCode: 65,
+    chars: ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'br', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'br', 'z', 'x', 'c', 'v', 'b', 'n', 'm']
+  },
+  ru: {
+    length: 32,
+    startCharCode: 1040,
+    chars: ['й', 'ц', 'у', 'к', 'е', 'н', 'г', 'ш', 'щ', 'з', 'х', 'ъ', 'br', 'ф', 'ы', 'в', 'а', 'п', 'р', 'о', 'л', 'д', 'ж', 'э', 'br', 'я', 'ч', 'с', 'м', 'и', 'т', 'ь', 'б', 'ю']
+  },
 };
+
 let blockedLetters = [];
 
 createCharsGrid('en');
@@ -20,28 +29,39 @@ function createCharsGrid (lang) {
   grid.textContent = '';
 
   letters.forEach(function (char) {
-    const div = document.createElement('div')
-    div.textContent = char;
-    div.classList.add('cell');
-    div.id = char;
+    const div = document.createElement('div');
+
+    if (char === 'br') {
+      div.classList.add('break');
+    } else {
+      div.classList.add('cell');
+      div.textContent = char;
+      div.id = char;
+    }
+
     fragment.appendChild(div);
-  })
+  });
 
   grid.appendChild(fragment);
 }
 
 function getAlphabet(lang) {
-  const alphabetCharCodes = Array.from(Array(langOptions[lang].length)).map((e, i) => i + langOptions[lang].startCharCode);
-  return alphabetCharCodes.map(x => String.fromCharCode(x));
+  return langOptions[lang]?.chars ?? [];
 }
 
 function validate(input) {
   if (input.value === '') {
-    document.getElementById(input.dataset.char)?.classList.remove('selected'); // TODO: what if there are 2 repeated characters?
+    // TODO: what if there are 2 repeated characters?
+    document.getElementById(input.dataset.char)?.classList.remove('selected');
   }
 
-  input.value = input.value.replace(/[^A-Za-zA-Яа-я]/g, '').toUpperCase();
-  document.getElementById(input.value)?.classList.add('selected');
+  input.value = input.value.replace(/[^A-Za-zA-Яа-я]/g, '');
+  const char = document.getElementById(input.value);
+
+  if (char) {
+    char.className = 'cell selected';
+  }
+
   input.dataset.char = input.value;
 
   if(input.nextElementSibling && input.nextElementSibling.tagName === 'INPUT') {
@@ -87,6 +107,7 @@ function handleChangeLang(radio) {
 }
 
 form.addEventListener('send', e => e.preventDefault());
+
 reset.addEventListener('click', resetForm);
 
 find.addEventListener('click', e => {
@@ -135,8 +156,10 @@ find.addEventListener('click', e => {
 
 grid.addEventListener('click', e => {
   const target = e.target;
+
   if (target.classList.contains('cell') && !target.classList.contains('selected')) {
     target.classList.toggle('not');
+
     if (target.classList.contains('not')) {
       blockedLetters = [...blockedLetters, target.id.toLowerCase()];
     } else {

@@ -3,25 +3,9 @@
   padding: 0;
   box-sizing: border-box;
 }
-
 html {
   -webkit-text-size-adjust: 100%;
 }
-
-a {
-  background-color: transparent;
-  -webkit-text-decoration-skip: objects;
-
-  &:hover {
-    text-decoration: none;
-  }
-
-  &:active,
-  &:focus {
-    outline-width: 0;
-  }
-}
-
 button,
 [type="button"],
 [type="reset"],
@@ -29,33 +13,16 @@ button,
   -webkit-appearance: button;
   cursor: pointer;
 }
-
-img {
-  vertical-align: middle;
-  border-style: none;
-}
-
-ol, ul {
-  list-style: none;
-}
-
-svg:not(:root) {
-  overflow: hidden;
-}
-
-a,
 button,
 [role="button"],
 label,
 select {
   touch-action: manipulation;
 }
-
 html {
   height: 100%;
   font-size: 10px;
 }
-
 body {
   display: flex;
   flex-direction: column;
@@ -69,28 +36,23 @@ body {
   background-position: center center;
   background-repeat: no-repeat;
 }
-
 h1, h2 {
   line-height: 1;
   text-align: center;
   text-shadow: 1px 1px 1px #fff
 }
-
 h1 {
   margin: 5rem auto 1rem;
   font: 3.5rem "Times New Roman", sans-serif;
 }
-
 h2 {
   margin: 1rem auto;
   font: 2.6rem "Times New Roman", sans-serif;
 }
-
 input[type="radio"] {
   appearance: none;
   display: none;
 }
-
 label {
   display: flex;
   justify-content: center;
@@ -107,14 +69,12 @@ label {
   cursor: pointer;
   background-color: transparent;
 }
-
 input[type="radio"]:checked + label {
   transition: linear 0.3s;
   color: white;
   font-weight: 900;
   background-color: #111;
 }
-
 input[type="text"] {
   all: unset;
   box-sizing: border-box;
@@ -125,9 +85,9 @@ input[type="text"] {
   color: white;
   font-size: 3rem;
   text-align: center;
+  text-transform: uppercase;
   background-color: #111;
 }
-
 button {
   margin: 2.5rem 0 0;
   padding: 0.75rem;
@@ -145,7 +105,6 @@ button {
     }
   }
 }
-
 .container {
   display: flex;
   justify-content: center;
@@ -153,7 +112,6 @@ button {
   width: calc(100% - 3rem);
   margin: 0 auto;
 }
-
 .result {
   width: 94%;
   max-width: 100rem;
@@ -179,7 +137,6 @@ button {
     transition: max-height .3s, border-width .3s, padding .3s, color .2s .2s;
   }
 }
-
 .tooltip {
   position: relative;
   color: orangered;
@@ -249,24 +206,28 @@ button {
     }
   }
 }
-
 .grid {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
-  width: calc(100% - 3rem);
+  gap: 0.45vw;
+  width: 100%;
   margin: 0 auto;
 }
-
+.break {
+  flex-basis: 100%;
+  height: 0;
+}
 .cell {
-  width: 3.4rem;
-  padding: 0.7rem 0;
+  width: 7.8vw;
+  margin-bottom: 0.3rem;
+  padding: 0.3rem 0;
   border: thin solid gold;
   border-radius: .5rem;
   color: white;
   text-align: center;
+  text-transform: uppercase;
   background-color: #111;
 
   &.selected {
@@ -278,7 +239,6 @@ button {
     background-color: slategray;
   }
 }
-
 .radio_container {
   display: flex;
   justify-content: space-around;
@@ -289,7 +249,6 @@ button {
   box-shadow: inset 0.5px 0.5px 2px 0 rgba(0, 0, 0, 0.25);
   background-color: rgba(#2B7542, .3);
 }
-
 @media only screen and (min-width: 768px) {
   h1 {
     margin: 4rem auto 3rem;
@@ -330,12 +289,12 @@ button {
   }
 
   .grid {
-    width: 63rem;
-    gap: 1.25rem;
+    width: 64rem;
   }
 
   .cell {
     width: 4.5rem;
+    margin: 0;
     padding: 1.4rem 0;
     border-radius: .8rem;
     font-size: 2rem;
