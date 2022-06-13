@@ -11,11 +11,10 @@
   <link rel="manifest" href="/wordle-helper/manifest.webmanifest">
   <link rel="stylesheet" href="css/styles.css">
 </head>
-<body>
+<body class="en">
+<h1>Wordle helper <sup class="tooltip" data-tooltip-en="Only English and Russian dictionaries are supported" data-tooltip-ru="Поддерживаются английский и русский словари">*</sup></h1>
 
-<h1>Wordle helper <sup class="tooltip" data-tooltip="Only English and Russian dictionaries are supported">*</sup></h1>
-
-<h2>1) Select language:</h2>
+<h2>1) <span class="en">Select language</span><span class="ru">Выберите язык</span>:</h2>
 <div class="container">
   <div class="radio_container">
     <input type="radio" name="radio" id="langEn" onclick="handleChangeLang(this)" value="en" checked>
@@ -26,7 +25,7 @@
 </div>
 
 <form id="formAvailableCharacters">
-  <h2>2) Add available characters:</h2>
+  <h2>2) <span class="en">Add available characters</span><span class="ru">Введите известные буквы</span>:</h2>
   <div class="container">
     <input type="text" name="c1" onkeyup="validate(this)" placeholder="-" />
     <input type="text" name="c2" onkeyup="validate(this)" placeholder="-" />
@@ -40,7 +39,7 @@
   </div>
 </form>
 <div class="result"></div>
-<h2>3) Select unused characters:</h2>
+<h2>3) <span class="en">Select unused characters</span><span class="ru">Отметьте ненужные буквы</span>:</h2>
 <div id='grid' class="grid"></div>
 
 <script>

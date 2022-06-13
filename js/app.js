@@ -104,6 +104,7 @@ function showHint(value) {
 
 function handleChangeLang(radio) {
   createCharsGrid(radio.value);
+  document.body.className = radio.value;
 }
 
 form.addEventListener('send', e => e.preventDefault());
@@ -137,7 +138,7 @@ find.addEventListener('click', e => {
 
   const lang = getLanguage(options);
   if (lang === 'noname') {
-    showHint('Your language not supported, sorry!');
+    showHint('The language you are using is not supported.');
     return;
   }
 

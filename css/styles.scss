@@ -47,7 +47,7 @@ h1 {
 }
 h2 {
   margin: 1rem auto;
-  font: 2.6rem "Times New Roman", sans-serif;
+  font: 2.4rem "Times New Roman", sans-serif;
 }
 input[type="radio"] {
   appearance: none;
@@ -137,6 +137,24 @@ button {
     transition: max-height .3s, border-width .3s, padding .3s, color .2s .2s;
   }
 }
+.en {
+  .en {
+    display: inline-block;
+  }
+
+  .ru {
+    display: none;
+  }
+}
+.ru {
+  .en {
+    display: none;
+  }
+
+  .ru {
+    display: inline-block;
+  }
+}
 .tooltip {
   position: relative;
   color: orangered;
@@ -164,8 +182,15 @@ button {
     opacity: 0;
   }
 
+  .en &::after {
+    content: attr(data-tooltip-en);
+  }
+
+  .ru &::after {
+    content: attr(data-tooltip-ru);
+  }
+
   &::after {
-    content: attr(data-tooltip);
     display: flex;
     flex-wrap: nowrap;
     width: 30rem;
