@@ -4,7 +4,7 @@ This app will help you to find a word according to the available letters. Englis
 
 **[Demo](https://sw999.github.io/wordle-helper/)**
 
-![screen](https://user-images.githubusercontent.com/3176886/173415686-c5aed6bf-3a7b-4435-9ab7-f8d86e807df2.png)
+![screen](https://user-images.githubusercontent.com/3176886/173416417-0bc5c77f-fc85-4ba7-a5b0-f264d1e7805f.png)
 
 Can be installed as an application and work offline (PWA).
 
