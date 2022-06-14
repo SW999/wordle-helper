@@ -52,7 +52,7 @@ function getAlphabet(lang) {
 function validate(input) {
   if (input.value === '') {
     // TODO: what if there are 2 repeated characters?
-    document.getElementById(input.dataset.char)?.classList.remove('selected');
+    document.getElementById((input.dataset.char).toLowerCase())?.classList.remove('selected');
   }
 
   input.value = input.value.replace(/[^A-Za-zA-Яа-я]/g, '');
