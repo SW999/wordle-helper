@@ -57,7 +57,7 @@ function validate(input) {
 
   input.value = input.value.replace(/[^A-Za-zA-Яа-я]/g, '');
   const char = document.getElementById(input.value.toLowerCase());
-  console.log('char: ', char);
+
   if (char) {
     char.className = 'cell selected';
   }

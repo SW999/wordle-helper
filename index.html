@@ -10,7 +10,6 @@
   <link rel="icon" type="image/png" sizes="16x16" href="/wordle-helper/favicon-16x16.png">
   <link rel="manifest" href="/wordle-helper/manifest.webmanifest">
   <link rel="stylesheet" href="css/styles.css">
-<script src="//cdn.jsdelivr.net/npm/eruda"></script>
 </head>
 <body class="en">
 <h1>Wordle helper <sup class="tooltip" data-tooltip-en="Only English and Russian dictionaries are supported" data-tooltip-ru="Поддерживаются английский и русский словари">*</sup></h1>
@@ -42,7 +41,6 @@
 <div class="result"></div>
 <h2>3) <span class="en">Select unused characters</span><span class="ru">Отметьте ненужные буквы</span>:</h2>
 <div id='grid' class="grid"></div>
-<script>eruda.init();</script>
 <script>
   if (navigator.serviceWorker) {
     navigator.serviceWorker.register (
