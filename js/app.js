@@ -56,13 +56,13 @@ function validate(input) {
   }
 
   input.value = input.value.replace(/[^A-Za-zA-Яа-я]/g, '');
-  const char = document.getElementById(input.value);
-
+  const char = document.getElementById(input.value.toLowerCase());
+  console.log('char: ', char);
   if (char) {
     char.className = 'cell selected';
   }
 
-  input.dataset.char = input.value;
+  input.dataset.char = input.value.toLowerCase();
 
   if(input.nextElementSibling && input.nextElementSibling.tagName === 'INPUT') {
     input.nextElementSibling.focus();
