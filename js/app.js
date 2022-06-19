@@ -56,16 +56,17 @@ function validate(input) {
   }
 
   input.value = input.value.replace(/[^A-Za-zA-Яа-я]/g, '');
+
+  if(input.nextElementSibling && input.nextElementSibling.tagName === 'INPUT') {
+    input.nextElementSibling.focus();
+  }
+
+  input.dataset.char = input.value.toLowerCase();
   const char = document.getElementById(input.value.toLowerCase());
 
   if (char) {
     char.className = 'cell selected';
-  }
 
-  input.dataset.char = input.value.toLowerCase();
-
-  if(input.nextElementSibling && input.nextElementSibling.tagName === 'INPUT') {
-    input.nextElementSibling.focus();
   }
 }
 
@@ -93,7 +94,7 @@ function resetForm() {
 }
 
 function showHint(value) {
-  result.textContent = value;
+  result.innerHTML = value;
   if (!result.classList.contains('on')) {
     result.classList.add('on');
   }
@@ -113,7 +114,7 @@ reset.addEventListener('click', resetForm);
 
 find.addEventListener('click', e => {
   e.preventDefault();
-  let hint = 'Requires at least 2 letters';
+  let hint = '<span class="en">Requires at least 2 letters</span><span class="ru">Введите минимум 2 буквы</span>';
   let wordLength = 0;
   let letters = 0;
   const options = {};
@@ -138,7 +139,7 @@ find.addEventListener('click', e => {
 
   const lang = getLanguage(options);
   if (lang === 'noname') {
-    showHint('The language you are using is not supported.');
+    showHint('<span class="en">The language you are using is not supported.</span><span class="ru">Язык ввода не поддерживается.</span>');
     return;
   }
 
@@ -152,7 +153,7 @@ find.addEventListener('click', e => {
 
   result.setAttribute('lang', lang);
 
-  showHint(hint.length > 0 ? hint.join(' ') : 'No result');
+  showHint(hint.length > 0 ? hint.join(' ') : '<span class="en">No result.</span><span class="ru">Ничего не найдено.</span>');
 });
 
 grid.addEventListener('click', e => {
