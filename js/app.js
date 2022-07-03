@@ -23,7 +23,7 @@ let blockedLetters = [];
 
 createCharsGrid('en');
 
-function createCharsGrid (lang) {
+function createCharsGrid(lang) {
   const letters = getAlphabet(lang);
   const fragment = new DocumentFragment()
   grid.textContent = '';
@@ -50,14 +50,15 @@ function getAlphabet(lang) {
 }
 
 function validate(input) {
+  const val = input.value;
   if (input.value === '') {
     // TODO: what if there are 2 repeated characters?
     document.getElementById((input.dataset.char).toLowerCase())?.classList.remove('selected');
   }
 
-  input.value = input.value.replace(/[^A-Za-zA-Яа-я]/g, '');
+  input.value = val.replace(/[^A-Za-zA-Яа-я]/g, '');
 
-  if(input.nextElementSibling && input.nextElementSibling.tagName === 'INPUT') {
+  if (input.nextElementSibling && input.nextElementSibling.tagName === 'INPUT' && (val.charCodeAt(0) === 32 || ['ru', 'en'].includes(checkCharCode(val)))) {
     input.nextElementSibling.focus();
   }
 
@@ -66,14 +67,13 @@ function validate(input) {
 
   if (char) {
     char.className = 'cell selected';
-
   }
 }
 
 function checkCharCode(char) {
   if (!char) return '';
-  if (char.charCodeAt(0) > 64 && char.charCodeAt(0) < 123) return 'en';
-  if (char.charCodeAt(0) > 1024 && char.charCodeAt(0) < 1106) return 'ru';
+  if ((char.charCodeAt(0) >= langOptions.en.startCharCode && char.charCodeAt(0) < langOptions.en.startCharCode + langOptions.en.length) || (char.charCodeAt(0) >= 97 && char.charCodeAt(0) < 97 + langOptions.en.length)) return 'en';
+  if (char.charCodeAt(0) >= langOptions.ru.startCharCode && char.charCodeAt(0) < langOptions.ru.startCharCode + langOptions.ru.length * 2) return 'ru';
   return 'noname';
 }
 
@@ -126,7 +126,7 @@ find.addEventListener('click', e => {
 
   for (let p of formData) {
     options[p[0]] = p[1];
-    if(p[1] !== '') {
+    if (p[1] !== '') {
       letters++;
     }
     wordLength++;
@@ -144,7 +144,7 @@ find.addEventListener('click', e => {
   }
 
   hint = dict[`words_${lang}`].reduce((total, currentWord) => {
-    if(currentWord.length === wordLength && !blockedLetters.some(v => currentWord.includes(v))) {
+    if (currentWord.length === wordLength && !blockedLetters.some(v => currentWord.includes(v))) {
       const res = Object.values(options).every((value, i) => (currentWord[i] === value.toLowerCase() || value === ''));
       return res ? [...total, currentWord] : [...total];
     }
