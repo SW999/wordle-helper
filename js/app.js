@@ -1,5 +1,3 @@
-'use strict'
-
 const form = document.getElementById('formAvailableCharacters');
 const find = document.getElementById('find');
 const grid = document.getElementById('grid');
@@ -21,11 +19,11 @@ const langOptions = {
 
 let blockedLetters = [];
 
-createCharsGrid('en');
+createCharsGrid('ru');
 
 function createCharsGrid(lang) {
   const letters = getAlphabet(lang);
-  const fragment = new DocumentFragment()
+  const fragment = new DocumentFragment();
   grid.textContent = '';
 
   letters.forEach(function (char) {
@@ -90,7 +88,7 @@ function resetForm() {
   form.reset();
   result.classList.remove('on');
   reset.classList.remove('on');
-  document.getElementById('langEn').click();
+  document.getElementById('langRu').click();
 }
 
 function showHint(value) {
@@ -122,7 +120,7 @@ find.addEventListener('click', e => {
   const dict = {
     words_ru: words_ru ?? [],
     words_en: words_en ?? [],
-  }
+  };
 
   for (let p of formData) {
     options[p[0]] = p[1];

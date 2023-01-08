@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,16 +11,16 @@
   <link rel="manifest" href="/wordle-helper/manifest.webmanifest">
   <link rel="stylesheet" href="css/styles.css">
 </head>
-<body class="en">
+<body class="ru">
 <h1>Wordle helper <sup class="tooltip" data-tooltip-en="Only English and Russian dictionaries are supported" data-tooltip-ru="Поддерживаются английский и русский словари">*</sup></h1>
 
 <h2>1) <span class="en">Select language</span><span class="ru">Выберите язык</span>:</h2>
 <div class="container">
   <div class="radio_container">
-    <input type="radio" name="radio" id="langEn" onclick="handleChangeLang(this)" value="en" checked>
-    <label for="langEn">En</label>
-    <input type="radio" name="radio" id="langRu" onclick="handleChangeLang(this)" value="ru">
+    <input type="radio" name="radio" id="langRu" onclick="handleChangeLang(this)" value="ru" checked>
     <label for="langRu">Ru</label>
+    <input type="radio" name="radio" id="langEn" onclick="handleChangeLang(this)" value="en">
+    <label for="langEn">En</label>
   </div>
 </div>
 
@@ -35,7 +35,7 @@
   </div>
   <div class="container">
   <button type="button" id="find"><span class="en">Find</span><span class="ru">Найти</span></button>
-  <button type="button" id="resetBtn" class="reset"><span class="en">Reset</span><span class="ru">Сбросить все</span></button>
+  <button type="button" id="resetBtn" class="reset"><span class="en">Reset</span><span class="ru">Сбросить всё</span></button>
   </div>
 </form>
 <div class="result"></div>
