@@ -181,10 +181,9 @@ grid.addEventListener('click', e => {
 });
 
 inputs.addEventListener('keyup', function (e) {
-  const {target, code, key} = e;
+  const {target, key, keyCode} = e;
   if (target.tagName !== 'INPUT') return;
-
-  if (['Backspace', 'Delete'].includes(code) || key.length > 1) {
+  if ([8, 27, 46].includes(keyCode) || key.length > 1) {
     validate(target, '');
     return;
   }
