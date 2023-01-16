@@ -180,14 +180,26 @@ grid.addEventListener('click', e => {
   }
 });
 
-inputs.addEventListener('keyup', function (e) {
-  const {target, key, keyCode} = e;
-  document.getElementById('test').innerHTML = `<p>key: ${key};
-  keyCode: ${keyCode};
-  targetTagName: ${target.tagName}</p>`;
+function stringifyEvent(e) {
+  const obj = {};
+  for (let k in e) {
+    obj[k] = e[k];
+  }
+  return JSON.stringify(obj, (k, v) => {
+    if (v instanceof Node) return 'Node';
+    if (v instanceof Window) return 'Window';
+    return v;
+  }, ' ');
+}
+
+inputs.addEventListener('keypress', function (e) {
+  const {target, key, keyCode, code} = e;
+
+  const t = stringifyEvent(e);
+  document.getElementById('test').innerHTML = `<p>e: ${t}</p>`;
   if (target.tagName !== 'INPUT') return;
 
-  if ([8, 27, 46].includes(keyCode) || key.length > 1) {
+  if ([8, 27, 46].includes(keyCode) || key?.length > 1) {
     validate(target, '');
     return;
   }
