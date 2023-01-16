@@ -3,7 +3,6 @@ const find = document.getElementById('find');
 const grid = document.getElementById('grid');
 const result = document.querySelector('.result');
 const reset = document.getElementById('resetBtn');
-//const inputs = document.getElementById('inputs');
 const initialLang = ['ru', 'en'].includes(window.navigator.language.split('-')[0]) ? window.navigator.language.split('-')[0] : 'en';
 
 const langOptions = {
@@ -180,23 +179,8 @@ grid.addEventListener('click', e => {
   }
 });
 
-function stringifyEvent(e) {
-  const obj = {};
-  for (let k in e) {
-    obj[k] = e[k];
-  }
-  return JSON.stringify(obj, (k, v) => {
-    if (v instanceof Node) return 'Node';
-    if (v instanceof Window) return 'Window';
-    return v;
-  }, ' ');
-}
-
-function checkInput(e) {
+function handleInput(e) {
   const { data, inputType, target } = e;
-
-  const t = stringifyEvent(e);
-  document.getElementById('test').innerHTML = `<p>e: ${t}</p>`;
 
   if (['deleteContentBackward', 'deleteContentForward'].includes(inputType) || !data) {
     validate(target, '');
@@ -206,8 +190,8 @@ function checkInput(e) {
   validate(target, data.toLowerCase());
 }
 
-document.getElementById('c1').addEventListener('input', e => checkInput(e));
-document.getElementById('c2').addEventListener('input', e => checkInput(e));
-document.getElementById('c3').addEventListener('input', e => checkInput(e));
-document.getElementById('c4').addEventListener('input', e => checkInput(e));
-document.getElementById('c5').addEventListener('input', e => checkInput(e));
+document.getElementById('c1').addEventListener('input', e => handleInput(e));
+document.getElementById('c2').addEventListener('input', e => handleInput(e));
+document.getElementById('c3').addEventListener('input', e => handleInput(e));
+document.getElementById('c4').addEventListener('input', e => handleInput(e));
+document.getElementById('c5').addEventListener('input', e => handleInput(e));
