@@ -182,7 +182,11 @@ grid.addEventListener('click', e => {
 
 inputs.addEventListener('keyup', function (e) {
   const {target, key, keyCode} = e;
+  document.getElementById('test').innerHTML = `<p>key: ${key};
+  keyCode: ${keyCode};
+  targetTagName: ${target.tagName}</p>`;
   if (target.tagName !== 'INPUT') return;
+
   if ([8, 27, 46].includes(keyCode) || key.length > 1) {
     validate(target, '');
     return;
