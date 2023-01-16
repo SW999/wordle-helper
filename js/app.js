@@ -192,17 +192,17 @@ function stringifyEvent(e) {
   }, ' ');
 }
 
-inputs.addEventListener('keypress', function (e) {
-  const {target, key, keyCode, code} = e;
+inputs.addEventListener('input', function (e) {
+  //const {target, key, keyCode, code} = e;
 
   const t = stringifyEvent(e);
   document.getElementById('test').innerHTML = `<p>e: ${t}</p>`;
-  if (target.tagName !== 'INPUT') return;
-
-  if ([8, 27, 46].includes(keyCode) || key?.length > 1) {
-    validate(target, '');
-    return;
-  }
-
-  validate(target, key.toLowerCase());
+  // if (target.tagName !== 'INPUT') return;
+  //
+  // if ([8, 27, 46].includes(keyCode) || key?.length > 1) {
+  //   validate(target, '');
+  //   return;
+  // }
+  //
+  // validate(target, key.toLowerCase());
 });
