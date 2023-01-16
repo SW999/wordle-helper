@@ -3,7 +3,7 @@ const find = document.getElementById('find');
 const grid = document.getElementById('grid');
 const result = document.querySelector('.result');
 const reset = document.getElementById('resetBtn');
-const inputs = document.getElementById('inputs');
+//const inputs = document.getElementById('inputs');
 const initialLang = ['ru', 'en'].includes(window.navigator.language.split('-')[0]) ? window.navigator.language.split('-')[0] : 'en';
 
 const langOptions = {
@@ -192,17 +192,22 @@ function stringifyEvent(e) {
   }, ' ');
 }
 
-inputs.addEventListener('input', function (e) {
-  //const {target, key, keyCode, code} = e;
+function checkInput(e) {
+  const { data, inputType, target } = e;
 
   const t = stringifyEvent(e);
   document.getElementById('test').innerHTML = `<p>e: ${t}</p>`;
-  // if (target.tagName !== 'INPUT') return;
-  //
-  // if ([8, 27, 46].includes(keyCode) || key?.length > 1) {
-  //   validate(target, '');
-  //   return;
-  // }
-  //
-  // validate(target, key.toLowerCase());
-});
+
+  if (['deleteContentBackward', 'deleteContentForward'].includes(inputType) || !data) {
+    validate(target, '');
+    return;
+  }
+
+  validate(target, data.toLowerCase());
+}
+
+document.getElementById('c1').addEventListener('input', e => checkInput(e));
+document.getElementById('c2').addEventListener('input', e => checkInput(e));
+document.getElementById('c3').addEventListener('input', e => checkInput(e));
+document.getElementById('c4').addEventListener('input', e => checkInput(e));
+document.getElementById('c5').addEventListener('input', e => checkInput(e));
