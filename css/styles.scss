@@ -87,6 +87,16 @@ input[type="text"] {
   text-align: center;
   text-transform: uppercase;
   background-color: #111;
+
+  &[data-char] {
+    background-color: darkgreen;
+    cursor: pointer;
+  }
+
+  &[data-char-wrong] {
+    background-color: #c9b458;
+    cursor: pointer;
+  }
 }
 button {
   margin: 2.5rem 0 0;

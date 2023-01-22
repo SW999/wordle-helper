@@ -100,6 +100,14 @@ input[type=text] {
   text-transform: uppercase;
   background-color: #111;
 }
+input[type=text][data-char] {
+  background-color: darkgreen;
+  cursor: pointer;
+}
+input[type=text][data-char-wrong] {
+  background-color: #c9b458;
+  cursor: pointer;
+}
 
 button {
   margin: 2.5rem 0 0;

@@ -3,6 +3,7 @@ const find = document.getElementById('find');
 const grid = document.getElementById('grid');
 const result = document.querySelector('.result');
 const reset = document.getElementById('resetBtn');
+const inputs = document.querySelectorAll('#inputsWrapper input');
 const initialLang = ['ru', 'en'].includes(window.navigator.language.split('-')[0]) ? window.navigator.language.split('-')[0] : 'en';
 
 const langOptions = {
@@ -48,19 +49,24 @@ function getAlphabet(lang) {
 
 function validate(target, val) {
   if (val === '') {
-    if (target.dataset.char) {
-      const selector = `#inputs input:not([name="${target.name}"])`;
+    const savedChar = target.dataset.char ?? target.dataset.charWrong;
+
+    if (savedChar) {
+      const selector = `#inputsWrapper input:not([name="${target.name}"])`;
       const charInputs = document.querySelectorAll(selector);
       const selectedChars = [];
-      charInputs.forEach(el => selectedChars.push(el.dataset.char));
+      charInputs.forEach(el => selectedChars.push(el.dataset.char ?? el.dataset.charWrong));
 
       // Check if other inputs have different dataset.char
-      if (selectedChars.every(c => c !== target.dataset.char)) {
-        document.getElementById(target.dataset.char)?.classList.remove('selected');
+      if (selectedChars.every(c => c !== savedChar)) {
+        document.getElementById(savedChar)?.classList.remove('selected');
       }
     }
 
-    target.dataset.char = undefined;
+    delete target.dataset.char;
+    delete target.dataset.charWrong;
+
+    return;
   }
 
   target.value = val.replace(/[^A-Za-zA-Яа-я]/g, '');
@@ -86,7 +92,7 @@ function checkCharCode(char) {
 
 function getLanguage(options) {
   const langArr = Object.values(options).reduce((total, value) => {
-    const lang = checkCharCode(value);
+    const lang = checkCharCode(value?.val ?? '');
     return lang !== '' && total.indexOf(lang) < 0 ? [...total, lang] : [...total];
   }, []);
 
@@ -97,6 +103,10 @@ function resetForm() {
   form.reset();
   result.classList.remove('on');
   reset.classList.remove('on');
+  inputs.forEach(el => {
+    delete el.dataset.char;
+    delete el.dataset.charWrong;
+  });
   document.getElementById(initialLang).click();
 }
 
@@ -114,6 +124,33 @@ function handleChangeLang(radio) {
   createCharsGrid(radio.value);
   document.body.className = radio.value;
 }
+
+function handleInput(e) {
+  const { data, inputType, currentTarget } = e;
+
+  if (['deleteContentBackward', 'deleteContentForward'].includes(inputType) || !data) {
+    validate(currentTarget, '');
+    return;
+  }
+
+  validate(currentTarget, data.toLowerCase());
+}
+
+function handleClick(e) {
+  const target = e.currentTarget;
+  const char = target.dataset.char;
+  const wrong = target.dataset.charWrong;
+
+  if (char) {
+    target.dataset.charWrong = char;
+    delete target.dataset.char;
+  }
+  if (wrong) {
+    target.dataset.char = wrong;
+    delete target.dataset.charWrong;
+  }
+}
+
 // app init
 resetForm();
 
@@ -123,9 +160,10 @@ reset.addEventListener('click', resetForm);
 
 find.addEventListener('click', e => {
   e.preventDefault();
-  let hint = '<span class="en">Requires at least 2 letters</span><span class="ru">Введите минимум 2 буквы</span>';
+  let hint = '<span class="en">Requires at least 2 letters on correct position or 1 on correct position and 2 in wrong.</span><span class="ru">Введите минимум 2 буквы на правильном месте или 1 на правильном и минимум 2 на неизвестном.</span>';
   let wordLength = 0;
   let letters = 0;
+  let wrongPos = 0;
   const options = {};
   const formData = new FormData(form);
   const dict = {
@@ -134,14 +172,23 @@ find.addEventListener('click', e => {
   };
 
   for (let p of formData) {
-    options[p[0]] = p[1];
     if (p[1] !== '') {
-      letters++;
+      const selector = `#inputsWrapper input[name="${p[0]}"]`;
+      const isWrongPosition = !!(document.querySelector(selector).dataset.charWrong);
+
+      options[p[0]] = {
+        val: p[1],
+        wrong: isWrongPosition,
+      };
+      letters = isWrongPosition ? letters : letters + 1;
+      wrongPos = isWrongPosition ? wrongPos + 1 : wrongPos;
+    } else {
+      options[p[0]] = '';
     }
     wordLength++;
   }
 
-  if (letters < 2) {
+  if ((letters < 2 && wrongPos < 1) || (letters === 1 && wrongPos < 2)) {
     showHint(hint);
     return;
   }
@@ -154,13 +201,11 @@ find.addEventListener('click', e => {
 
   hint = dict[`words_${lang}`].reduce((total, currentWord) => {
     if (currentWord.length === wordLength && !blockedLetters.some(v => currentWord.includes(v))) {
-      const res = Object.values(options).every((value, i) => (currentWord[i] === value.toLowerCase() || value === ''));
+      const res = Object.values(options).every((value, i) => (value === '' || (currentWord[i] === value.val && !value.wrong) || (currentWord[i] !== value.val && value.wrong && currentWord.includes(value.val))));
       return res ? [...total, currentWord] : [...total];
     }
     return [...total];
   }, []);
-
-  result.setAttribute('lang', lang);
 
   showHint(hint.length > 0 ? hint.join(' ') : '<span class="en">No result.</span><span class="ru">Ничего не найдено.</span>');
 });
@@ -179,19 +224,7 @@ grid.addEventListener('click', e => {
   }
 });
 
-function handleInput(e) {
-  const { data, inputType, target } = e;
-
-  if (['deleteContentBackward', 'deleteContentForward'].includes(inputType) || !data) {
-    validate(target, '');
-    return;
-  }
-
-  validate(target, data.toLowerCase());
-}
-
-document.getElementById('c1').addEventListener('input', e => handleInput(e));
-document.getElementById('c2').addEventListener('input', e => handleInput(e));
-document.getElementById('c3').addEventListener('input', e => handleInput(e));
-document.getElementById('c4').addEventListener('input', e => handleInput(e));
-document.getElementById('c5').addEventListener('input', e => handleInput(e));
+inputs.forEach(el => {
+  el.addEventListener('input', e => handleInput(e));
+  el.addEventListener('click', e => handleClick(e));
+});
