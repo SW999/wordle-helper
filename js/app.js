@@ -111,7 +111,7 @@ function resetForm() {
 }
 
 function showHint(value) {
-  result.innerHTML = value;
+  result.querySelector('.content').innerHTML = value;
   if (!result.classList.contains('on')) {
     result.classList.add('on');
   }
@@ -134,6 +134,7 @@ function handleInput(e) {
   }
 
   validate(currentTarget, data.toLowerCase());
+  blockedLetters = blockedLetters.filter(item => item !== data); // in case letter was added to blocked list before
 }
 
 function handleClick(e) {
