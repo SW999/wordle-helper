@@ -134,7 +134,7 @@ function handleInput(e) {
   }
 
   validate(currentTarget, data.toLowerCase());
-  blockedLetters = blockedLetters.filter(item => item !== data); // in case letter was added to blocked list before
+  blockedLetters = blockedLetters.filter(item => item.toLowerCase() !== data.toLowerCase()); // in case letter was added to blocked list before
 }
 
 function handleClick(e) {
